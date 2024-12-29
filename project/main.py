@@ -10,37 +10,53 @@ JANELA = pygame.display.set_mode((LARGURA_JANELA, ALTURA_JANELA))
 pygame.display.set_caption("Tradutor Gestual")
 
 
-WHITE = (255, 255, 255)
-current_screen = "menu"
+BRANCO = (255, 255, 255)
+PRETO = (0, 0, 0)
+AZUL = (0, 122, 255)
+CINZENTO = (79, 79, 79)
+ROSA = (219, 112, 147)
+
+FONTE_TITULO = pygame.font.Font(None, 74)
+FONTE_BOTAO = pygame.font.Font(None, 74)
+
+def desenhar_texto(janela, texto, fonte, cor, posicao):
+    texto_superficie = fonte.render(texto, True, cor)
+    texto_retangulo = texto_superficie.get_rect(center=posicao)
+    janela.blit(texto_superficie, texto_retangulo)
 
 
-def handle_screen_transition(screen_name):
-    
-    if screen_name == "menu":
-        return menu(screen, WHITE)    
-    elif screen_name == "aprendizagem":
-        return aprendizagem(screen, WHITE) 
-    elif screen_name == "treino":
-        return treino(screen, WHITE) 
-    elif screen_name == "desafio":
-        return desafio(screen, WHITE) 
-    elif screen_name == "quit":
-        return "quit"
-    return screen_name
- 
-running = True   
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-            current_screen = "quit"
-            
-    current_screen = handle_screen_transition(current_screen)
-    
-    if current_screen == "quit":
-        running = False
+def menu_principal():
+    while True:
+        JANELA.fill(BRANCO)
         
-    pygame.display.flip()
+        desenhar_texto(JANELA, "Tradutor Gestual", FONTE_TITULO, PRETO, (LARGURA_JANELA // 2, 100))
 
-pygame.quit()
-sys.exit()
+        espaco_vertical = 100
+        botao_aprender = pygame.Rect(LARGURA_JANELA // 2 - 150, 200, 300, 60)
+        botao_treino = pygame.Rect(LARGURA_JANELA // 2 - 150, 200 + espaco_vertical, 300, 60)
+        botao_desafio = pygame.Rect(LARGURA_JANELA // 2 - 150, 200 + 2 * espaco_vertical, 300, 60)
+ 
+        pygame.draw.rect(JANELA, AZUL, botao_aprender)
+        pygame.draw.rect(JANELA, AZUL, botao_treino)
+        pygame.draw.rect(JANELA, AZUL, botao_desafio)
+        
+        desenhar_texto(JANELA, "Aprender", FONTE_BOTAO, BRANCO, botao_aprender.center)
+        desenhar_texto(JANELA, "Treino", FONTE_BOTAO, BRANCO, botao_treino.center)
+        desenhar_texto(JANELA, "Desafio", FONTE_BOTAO, BRANCO, botao_desafio.center)
+    
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if botao_aprender.collidepoint(event.pos):
+                    print("Aprender Clicado")
+                if botao_treino.collidepoint(event.pos):
+                    print("Treino Clicado")
+                if botao_desafio.collidepoint(event.pos):
+                    print("Desafio Clicado")
+                    
+        pygame.display.flip()
+
+menu_principal()
