@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Label, Button
+from tkinter import Label, Button, Frame
 from PIL import Image, ImageTk
 
 def clear_window(root):
@@ -35,26 +35,25 @@ def sair(root):
 
 def main_menu(root, background_color):
     clear_window(root)
-    
-    image = Image.open("project/assets/titulo.png")
-    image = image.resize((300,52), Image.Resampling.LANCZOS)
-    photo = ImageTk.PhotoImage(image)
 
-    label_title = Label(root, image=photo, bg=background_color)
-    label_title.image = photo
+    # centro
+    frame = Frame(root, bg=background_color, padx=20, pady=20)
+    frame.pack(expand=True)
+
+    label_title = Label(frame, text="Modos de Jogo", font=("Arial", 24, "bold"), bg=background_color)
     label_title.pack(pady=20)
 
-    Button(root, text="Aprendizagem", font=("Arial", 16), 
+    Button(frame, text="APRENDIZAGEM", font=("Arial", 16), 
            command=lambda: start_aprendizagem(root, background_color)).pack(pady=10, fill="x", padx=20)
     
-    Button(root, text="Treino", font=("Arial", 16),
+    Button(frame, text="TREINO", font=("Arial", 16),
            command=lambda: start_treino(root, background_color)).pack(pady=10, fill="x", padx=20)
     
-    Button(root, text="Desafio", font=("Arial", 16),
+    Button(frame, text="DESAFIO", font=("Arial", 16),
            command=lambda: start_desafio(root, background_color)).pack(pady=10, fill="x", padx=20)
     
-    Button(root, text="Sair", font=("Arial", 16), 
-           command=lambda: sair(root)).pack(pady=10, fill="x", padx=20)
+    Button(frame, text="Sair", font=("Arial", 16), 
+           command=root.quit).pack(pady=10, fill="x", padx=20)
 
 # main app ----------------------------------------
 
@@ -64,14 +63,9 @@ def main():
 
     background_color = "#FFFFFF"
     root.configure(bg=background_color)
-
-    screen_width = root.winfo_screenwidth()
-    screen_height = root.winfo_screenheight()
-    root.geometry(f"{screen_width}x{screen_height}")
-    root.resizable(False, False)
+    root.attributes("-fullscreen", True)
 
     main_menu(root, background_color)
-
     root.mainloop()
 
 if __name__ == "__main__":
