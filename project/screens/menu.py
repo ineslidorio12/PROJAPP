@@ -37,23 +37,23 @@ def main_menu(root, background_color):
     clear_window(root)
 
     # centro
-    frame = Frame(root, bg=background_color, padx=20, pady=20)
+    frame = Frame(root, bg=background_color, padx=0, pady=0)
     frame.pack(expand=True)
 
-    label_title = Label(frame, text="Modos de Jogo", font=("Arial", 24, "bold"), bg=background_color)
-    label_title.pack(pady=20)
+    label_title = Label(frame, text="Modos de Jogo", font=("Arial", 20, "bold"), bg=background_color)
+    label_title.pack(pady=10)
 
-    Button(frame, text="APRENDIZAGEM", font=("Arial", 16), 
-           command=lambda: start_aprendizagem(root, background_color)).pack(pady=10, fill="x", padx=20)
+    Button(frame, text="APRENDIZAGEM", font=("Arial", 14), 
+           command=lambda: start_aprendizagem(root, background_color)).pack(pady=10, fill="both", padx=10)
     
-    Button(frame, text="TREINO", font=("Arial", 16),
-           command=lambda: start_treino(root, background_color)).pack(pady=10, fill="x", padx=20)
+    Button(frame, text="TREINO", font=("Arial", 14),
+           command=lambda: start_treino(root, background_color)).pack(pady=10, fill="both", padx=10)
     
-    Button(frame, text="DESAFIO", font=("Arial", 16),
-           command=lambda: start_desafio(root, background_color)).pack(pady=10, fill="x", padx=20)
+    Button(frame, text="DESAFIO", font=("Arial", 14),
+           command=lambda: start_desafio(root, background_color)).pack(pady=10, fill="both", padx=10)
     
-    Button(frame, text="Sair", font=("Arial", 16), 
-           command=root.quit).pack(pady=10, fill="x", padx=20)
+    Button(frame, text="Sair", font=("Arial", 14), 
+           command=root.quit).pack(pady=10, fill="both", padx=10)
 
 # main app ----------------------------------------
 
