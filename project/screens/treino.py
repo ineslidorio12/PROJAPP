@@ -2,7 +2,7 @@ from utils.text import draw_text
 from utils.buttons import draw_button
 
 def treino(screen, background_color):
-    """Renderiza a tela do modo Treino"""
+
     screen.fill(background_color)
     draw_text(screen, "Modo Treino", 400, 300, size=50)
 

@@ -2,6 +2,8 @@ from utils.buttons import draw_button
 from utils.text import draw_text
 
 def menu(screen, background_color):
+    
+    
     screen.fill(background_color)
     draw_text(screen, "Modos de Jogo", 400, 100, size=50)
 
