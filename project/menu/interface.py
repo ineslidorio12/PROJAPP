@@ -36,7 +36,7 @@ def sair(root):
 def main_menu(root, background_color):
     clear_window(root)
     
-    image = Image.open("project/menu/titulo.png")
+    image = Image.open("project/assets/titulo.png")
     image = image.resize((300,52), Image.Resampling.LANCZOS)
     photo = ImageTk.PhotoImage(image)
 
