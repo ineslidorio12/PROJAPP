@@ -14,9 +14,7 @@ IMAGEM_FUNDO = pygame.transform.scale(IMAGEM_FUNDO, (LARGURA_JANELA, ALTURA_JANE
 
 BRANCO = (255, 255, 255)
 PRETO = (0, 0, 0)
-AZUL = (0, 122, 255)
 CINZENTO = (79, 79, 79) 
-ROSA = (219, 112, 147)
 
 FONTE_TITULO = pygame.font.Font(None, 74)
 FONTE_BOTAO = pygame.font.Font("project/utils/dogicapixel.ttf", 18)
@@ -25,7 +23,7 @@ def desenhar_texto(janela, texto, fonte, cor, posicao):
     texto_superficie = fonte.render(texto, True, cor)
     texto_retangulo = texto_superficie.get_rect(center=posicao)
     janela.blit(texto_superficie, texto_retangulo)
-
+    return texto_retangulo
 
 def texto_clicado(texto, fonte, posicao, event):
     texto_superficie = fonte.render(texto, True, BRANCO)
@@ -38,7 +36,7 @@ def texto_clicado(texto, fonte, posicao, event):
 def nova_janela(titulo):
     while True:
         JANELA.fill(PRETO)
-        desenhar_texto(JANELA, titulo, FONTE_TITULO, PRETO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2))
+        desenhar_texto(JANELA, titulo, FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -60,22 +58,27 @@ def menu_principal():
         pos_treino = (LARGURA_JANELA // 2, 400)
         pos_desafio = (LARGURA_JANELA // 2, 450)
         
-        desenhar_texto(JANELA, "APRENDER", FONTE_BOTAO, BRANCO, pos_aprender)
-        desenhar_texto(JANELA, "TREINO", FONTE_BOTAO, BRANCO, pos_treino)
-        desenhar_texto(JANELA, "DESAFIO", FONTE_BOTAO, BRANCO, pos_desafio)
-    
+        mouse_pos = pygame.mouse.get_pos()
+        
+        cor_aprender = CINZENTO if desenhar_texto(JANELA, "APRENDER", FONTE_BOTAO, BRANCO, pos_aprender).collidepoint(mouse_pos) else BRANCO
+        cor_treino = CINZENTO if desenhar_texto(JANELA, "TREINO", FONTE_BOTAO, BRANCO, pos_treino).collidepoint(mouse_pos) else BRANCO
+        cor_desafio = CINZENTO if desenhar_texto(JANELA, "DESAFIO", FONTE_BOTAO, BRANCO, pos_desafio).collidepoint(mouse_pos) else BRANCO
+
+        desenhar_texto(JANELA, "APRENDER", FONTE_BOTAO, cor_aprender, pos_aprender)
+        desenhar_texto(JANELA, "TREINO", FONTE_BOTAO, cor_treino, pos_treino)
+        desenhar_texto(JANELA, "DESAFIO", FONTE_BOTAO, cor_desafio, pos_desafio)
+                
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if texto_clicado("Aprender", FONTE_BOTAO, pos_aprender, event):
-                    nova_janela("Modo Aprender")
-                if texto_clicado("Treino", FONTE_BOTAO, pos_treino, event):
-                    nova_janela("Modo Treino")
-                if texto_clicado("Desafio", FONTE_BOTAO, pos_desafio, event):
-                    nova_janela("Modo Desafio")
+            if texto_clicado("Aprender", FONTE_BOTAO, pos_aprender, event):
+                nova_janela("Modo Aprender")
+            if texto_clicado("Treino", FONTE_BOTAO, pos_treino, event):
+                nova_janela("Modo Treino")
+            if texto_clicado("Desafio", FONTE_BOTAO, pos_desafio, event):
+                nova_janela("Modo Desafio")
                     
         pygame.display.flip()
 
