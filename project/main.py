@@ -46,27 +46,55 @@ def nova_janela(titulo):
                 return
         
         pygame.display.flip()
+# pagina principal ------------------------------------------------------------
+def pagina_inicial():
+    while True:
+        JANELA.blit(IMAGEM_FUNDO, (0, 0))
+        
+        pos_jogar = (LARGURA_JANELA // 2, 370)
+        pos_sair = (LARGURA_JANELA // 2, 420)
+        
+        mouse_pos = pygame.mouse.get_pos()
+        
+        cor_jogar = CINZENTO if desenhar_texto(JANELA, "JOGAR", FONTE_BOTAO, BRANCO, pos_jogar).collidepoint(mouse_pos) else BRANCO
+        cor_sair = CINZENTO if desenhar_texto(JANELA, "SAIR", FONTE_BOTAO, BRANCO, pos_sair).collidepoint(mouse_pos) else BRANCO
+        
+        desenhar_texto(JANELA, "JOGAR", FONTE_BOTAO, cor_jogar, pos_jogar)
+        desenhar_texto(JANELA, "SAIR", FONTE_BOTAO, cor_sair, pos_sair)
+        
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if texto_clicado("JOGAR", FONTE_BOTAO, pos_jogar, evento):
+                menu_principal()
+            if texto_clicado("SAIR", FONTE_BOTAO, pos_sair, evento):
+                pygame.quit()
+                sys.exit()
 
+        pygame.display.flip()
+        
 # menu inicial ----------------------------------------------------------------
 def menu_principal():
     while True:
         JANELA.blit(IMAGEM_FUNDO, (0, 0))
         
-        # desenhar_texto(JANELA, "Tradutor Gestual", FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, 100))
-
-        pos_aprender = (LARGURA_JANELA // 2, 350)
-        pos_treino = (LARGURA_JANELA // 2, 400)
-        pos_desafio = (LARGURA_JANELA // 2, 450)
+        pos_aprender = (LARGURA_JANELA // 2, 300)
+        pos_treino = (LARGURA_JANELA // 2, 350)
+        pos_desafio = (LARGURA_JANELA // 2, 400)
+        pos_sair = (LARGURA_JANELA // 2, 450)
         
         mouse_pos = pygame.mouse.get_pos()
         
         cor_aprender = CINZENTO if desenhar_texto(JANELA, "APRENDER", FONTE_BOTAO, BRANCO, pos_aprender).collidepoint(mouse_pos) else BRANCO
         cor_treino = CINZENTO if desenhar_texto(JANELA, "TREINO", FONTE_BOTAO, BRANCO, pos_treino).collidepoint(mouse_pos) else BRANCO
         cor_desafio = CINZENTO if desenhar_texto(JANELA, "DESAFIO", FONTE_BOTAO, BRANCO, pos_desafio).collidepoint(mouse_pos) else BRANCO
+        cor_sair = CINZENTO if desenhar_texto(JANELA, "SAIR", FONTE_BOTAO, BRANCO, pos_sair).collidepoint(mouse_pos) else BRANCO
 
         desenhar_texto(JANELA, "APRENDER", FONTE_BOTAO, cor_aprender, pos_aprender)
         desenhar_texto(JANELA, "TREINO", FONTE_BOTAO, cor_treino, pos_treino)
         desenhar_texto(JANELA, "DESAFIO", FONTE_BOTAO, cor_desafio, pos_desafio)
+        desenhar_texto(JANELA, "SAIR", FONTE_BOTAO, cor_sair, pos_sair)
                 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -79,7 +107,10 @@ def menu_principal():
                 nova_janela("Modo Treino")
             if texto_clicado("Desafio", FONTE_BOTAO, pos_desafio, event):
                 nova_janela("Modo Desafio")
+            if texto_clicado("SAIR", FONTE_BOTAO, pos_sair, event):
+                pygame.quit()
+                sys.exit()
                     
         pygame.display.flip()
 
-menu_principal()
+pagina_inicial()
