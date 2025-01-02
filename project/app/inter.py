@@ -1,25 +1,6 @@
 import pygame
 import sys
-
-pygame.init()
-
-# ediçoes basicas -----------------------------------
-LARGURA_JANELA = 800
-ALTURA_JANELA = 800
-JANELA = pygame.display.set_mode((LARGURA_JANELA, ALTURA_JANELA))
-pygame.display.set_caption("Tradutor Gestual")
-
-IMAGEM_FUNDO = pygame.image.load("project/assets/fundo.png")
-IMAGEM_FUNDO = pygame.transform.scale(IMAGEM_FUNDO, (LARGURA_JANELA, ALTURA_JANELA))
-
-BRANCO = (255, 255, 255)
-PRETO = (0, 0, 0)
-CINZENTO = (79, 79, 79) 
-
-FONTE_TITULO = pygame.font.Font(None, 74)
-FONTE_BOTAO = pygame.font.Font("project/utils/dogicapixel.ttf", 18)
-
-# definicao da app ---------------------------------------
+from config import JANELA, IMAGEM_FUNDO, FONTE_TITULO, FONTE_BOTAO, BRANCO, CINZENTO, PRETO, LARGURA_JANELA, ALTURA_JANELA
 
 def desenhar_texto(janela, texto, fonte, cor, posicao):
     texto_superficie = fonte.render(texto, True, cor)
@@ -49,7 +30,8 @@ def nova_janela(titulo):
         
         pygame.display.flip()
         
-# pagina principal ------------------------------------------------------------
+        
+# pagina principal -------------------------------------------------------------------------------------------------------
 
 def pagina_inicial():
     while True:
@@ -59,13 +41,13 @@ def pagina_inicial():
         pos_sair = (LARGURA_JANELA // 2, 420)
         
         mouse_pos = pygame.mouse.get_pos()
-        
+                
         cor_jogar = CINZENTO if desenhar_texto(JANELA, "JOGAR", FONTE_BOTAO, BRANCO, pos_jogar).collidepoint(mouse_pos) else BRANCO
         cor_sair = CINZENTO if desenhar_texto(JANELA, "SAIR", FONTE_BOTAO, BRANCO, pos_sair).collidepoint(mouse_pos) else BRANCO
         
         desenhar_texto(JANELA, "JOGAR", FONTE_BOTAO, cor_jogar, pos_jogar)
         desenhar_texto(JANELA, "SAIR", FONTE_BOTAO, cor_sair, pos_sair)
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -78,7 +60,7 @@ def pagina_inicial():
 
         pygame.display.flip()
         
-# menu inicial ----------------------------------------------------------------
+# menu inicial --------------------------------------------------------------------------------------------------------
 
 def menu_principal():
     while True:
@@ -122,5 +104,5 @@ def menu_principal():
                 sys.exit()
                     
         pygame.display.flip()
-
+        
 pagina_inicial()
