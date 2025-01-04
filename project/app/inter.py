@@ -1,7 +1,14 @@
 import pygame
 import sys
+import cv2
+from objetos import Objeto
 from config import JANELA, IMAGEM_FUNDO, FONTE_TITULO, FONTE_BOTAO, BRANCO, CINZENTO, PRETO, LARGURA_JANELA, ALTURA_JANELA
+from video import VideoCaptureThread
 
+modelo_ssd = Objeto()
+video_thread = VideoCaptureThread()
+
+# --------------------------------------------------------------
 def desenhar_texto(janela, texto, fonte, cor, posicao):
     texto_superficie = fonte.render(texto, True, cor)
     texto_retangulo = texto_superficie.get_rect(center=posicao)
@@ -48,15 +55,34 @@ def pagina_inicial():
         desenhar_texto(JANELA, "JOGAR", FONTE_BOTAO, cor_jogar, pos_jogar)
         desenhar_texto(JANELA, "SAIR", FONTE_BOTAO, cor_sair, pos_sair)
 
+        frame = video_thread.get_frame()
+        if frame is not None:
+            objeto_detetado = modelo_ssd.detetar_objetos(frame, confianca_minima=0.6)
+            for objeto, _, box in objeto_detetado:
+                
+                startX,  startY, endX, endY = box
+                cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 255,0), 2)
+                label =f"{objeto}"
+                cv2.putText(frame, label, (startX, startY - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                
+                if objeto == "cell phone":
+                    menu_principal()       
+
+            frame_resized = cv2.resize(frame, (300, 225))
+            frame_surface = pygame.image.frombuffer(frame_resized.tobytes(), frame_resized.shape[1::-1], "BGR")
+            JANELA.blit(frame_surface, (LARGURA_JANELA - 320, ALTURA_JANELA - 250))
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                video_thread.stop()
                 pygame.quit()
                 sys.exit()
-            if texto_clicado("JOGAR", FONTE_BOTAO, pos_jogar, event):
-                menu_principal()
+            
             if texto_clicado("SAIR", FONTE_BOTAO, pos_sair, event):
+                video_thread.stop()
                 pygame.quit()
                 sys.exit()
+            
 
         pygame.display.flip()
         
