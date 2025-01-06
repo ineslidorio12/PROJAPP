@@ -111,9 +111,27 @@ def menu_principal():
         desenhar_texto(JANELA, "DESAFIO", FONTE_BOTAO, cor_desafio, pos_desafio)
         desenhar_texto(JANELA, "PAGINA INICIAL", FONTE_BOTAO, cor_inicial, pos_inicial)
         desenhar_texto(JANELA, "SAIR", FONTE_BOTAO, cor_sair, pos_sair)
+        
+        frame = video_thread.get_frame()
+        if frame is not None:
+            objeto_detetado = modelo_ssd.detetar_objetos(frame, confianca_minima=0.6)
+            for objeto, _, box in objeto_detetado:
                 
+                startX,  startY, endX, endY = box
+                cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 255,0), 2)
+                label =f"{objeto}"
+                cv2.putText(frame, label, (startX, startY - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                
+                if objeto == "bottle":
+                    nova_janela("Modo Aprender")
+                elif objeto == "pen":
+                    nova_janela("Modo Treino")
+                elif objeto == "sports ball":
+                    nova_janela("Modo Desafio")
+              
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                video_thread.stop()
                 pygame.quit()
                 sys.exit()
             
