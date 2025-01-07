@@ -57,7 +57,7 @@ def pagina_inicial():
 
         frame = video_thread.get_frame()
         if frame is not None:
-            objeto_detetado = modelo_ssd.detetar_objetos(frame, confianca_minima=0.6)
+            objeto_detetado = modelo_ssd.detetar_objetos(frame, confianca_minima=0.7)
             for objeto, _, box in objeto_detetado:
                 
                 startX,  startY, endX, endY = box
@@ -114,7 +114,7 @@ def menu_principal():
         
         frame = video_thread.get_frame()
         if frame is not None:
-            objeto_detetado = modelo_ssd.detetar_objetos(frame, confianca_minima=0.6)
+            objeto_detetado = modelo_ssd.detetar_objetos(frame, confianca_minima=0.7)
             for objeto, _, box in objeto_detetado:
                 
                 startX,  startY, endX, endY = box
@@ -128,7 +128,11 @@ def menu_principal():
                     nova_janela("Modo Treino")
                 elif objeto == "sports ball":
                     nova_janela("Modo Desafio")
-              
+
+            frame_resized = cv2.resize(frame, (300, 225))
+            frame_surface = pygame.image.frombuffer(frame_resized.tobytes(), frame_resized.shape[1::-1], "BGR")
+            JANELA.blit(frame_surface, (LARGURA_JANELA - 320, ALTURA_JANELA - 250))
+            
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 video_thread.stop()

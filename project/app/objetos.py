@@ -7,7 +7,8 @@ class Objeto:
         self.NET_TRAINED = "project/models/frozen_inference_graph.pb"
         self.NET_CONFIG = "project/models/ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt"
 
-        self.CONFIDENCE_THRESHOLD = 0.6
+        self.CONFIDENCE_THRESHOLD = 0.7
+        self.NMS_THRESHOLD = 0.3
         self.INPUT_SIZE = (320, 320)
         self.SCALE_FACTOR = 1.0 / 127.5
         self.MEAN_VALUES = (127.5, 127.5, 127.5)
@@ -27,31 +28,34 @@ class Objeto:
     def carregar_modelo(self):
         if not os.path.exists(self.NET_TRAINED) or not os.path.exists(self.NET_CONFIG):
             raise FileNotFoundError("Arquivos do modelo SSD não encontrados.")
-        return cv.dnn.readNetFromTensorflow(self.NET_TRAINED, self.NET_CONFIG)
-    
+        # Create DetectionModel instead of generic Net
+        model = cv.dnn_DetectionModel(self.NET_TRAINED, self.NET_CONFIG)
+        model.setInputParams(
+            size=self.INPUT_SIZE,
+            scale=self.SCALE_FACTOR,
+            mean=self.MEAN_VALUES,
+            swapRB=self.SWAP_RB,
+        )
+        return model
+
     
     def detetar_objetos(self, frame, confianca_minima=None):
         if confianca_minima is not None:
             self.CONFIDENCE_THRESHOLD = confianca_minima
-        (h, w) = frame.shape[:2]
-        blob = cv.dnn.blobFromImage(
+
+
+        classes, scores, boxes = self.net.detect(
             frame,
-            scalefactor=self.SCALE_FACTOR,
-            size=self.INPUT_SIZE,
-            mean=self.MEAN_VALUES,
-            swapRB=self.SWAP_RB,
-            crop=False,
+            confThreshold=self.CONFIDENCE_THRESHOLD,
+            nmsThreshold=self.NMS_THRESHOLD
         )
-        self.net.setInput(blob)
-        detections = self.net.forward()
 
         results = []
-        for i in range(detections.shape[2]):
-            confidence = detections[0, 0, i, 2]
-            if confidence > self.CONFIDENCE_THRESHOLD:
-                idx = int(detections[0, 0, i, 1])
-                class_name = self.class_name[idx] if idx < len(self.class_name) else "Unknown"
-                box = detections[0, 0, i, 3:7] * [w, h, w, h]
-                (startX, startY, endX, endY) = box.astype("int")
-                results.append((class_name, confidence, (startX, startY, endX, endY)))
+        for class_id, score, box in zip(classes, scores, boxes):
+            if score > self.CONFIDENCE_THRESHOLD:
+                class_name = self.class_name[class_id] if class_id < len(self.class_name) else "Unknown"
+                startX, startY, width, height = box
+                endX = startX + width
+                endY = startY + height
+                results.append((class_name, float(score), (startX, startY, endX, endY)))
         return results
