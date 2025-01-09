@@ -39,7 +39,7 @@ surfboard
 tennis racket
 bottle
 wine glass
-cup
+bottle
 fork
 knife
 spoon
@@ -55,18 +55,18 @@ pizza
 donut
 cake
 chair
-sofa
-pottedplant
+couch
+potted plant
 bed
-diningtable
+dining table
 toilet
-tvmonitor
+screen
 laptop
 mouse
-remote
+mouse
 keyboard
 cell phone
-microwave
+cell phone
 oven
 toaster
 sink
@@ -77,4 +77,4 @@ vase
 scissors
 teddy bear
 hair drier
-toothbrush
+bottle
