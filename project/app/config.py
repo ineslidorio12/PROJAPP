@@ -3,9 +3,11 @@ import pygame
 
 pygame.init()
 
-LARGURA_JANELA = 800
-ALTURA_JANELA = 800
-JANELA = pygame.display.set_mode((LARGURA_JANELA, ALTURA_JANELA))
+info = pygame.display.Info()
+LARGURA_JANELA = info.current_w
+ALTURA_JANELA = info.current_h
+JANELA = pygame.display.set_mode((LARGURA_JANELA, ALTURA_JANELA), pygame.FULLSCREEN)
+
 pygame.display.set_caption("Tradutor Gestual")
 
 IMAGEM_FUNDO = pygame.image.load("project/assets/fundo.png")

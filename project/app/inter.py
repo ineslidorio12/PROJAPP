@@ -5,17 +5,18 @@ import cv2 as cv
 from config import JANELA, IMAGEM_FUNDO, FONTE_TITULO, FONTE_BOTAO, BRANCO, CINZENTO, PRETO, LARGURA_JANELA, ALTURA_JANELA
 from video import VideoCaptureThread
 from hand_detector import HandDetector
+from modos.aprender import ModoAprender
 
 video = VideoCaptureThread()
 hand_detector = HandDetector(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 # --------------------------------------------------------------
-def mostrar_camera(frame):
-    results = hand_detector.detect_hands(frame)
-    hand_detector.draw_hands(frame, results)
+# def mostrar_camera(frame):
+    #results = hand_detector.detect_hands(frame)
+    #hand_detector.draw_hands(frame, results)
     
-    frame_resized = cv.resize(frame, (300, 225))
-    frame_surface = pygame.image.frombuffer(frame_resized.tobytes(), frame_resized.shape[1::-1], "BGR")
-    JANELA.blit(frame_surface, (LARGURA_JANELA - 320, ALTURA_JANELA - 250))
+    #frame_resized = cv.resize(frame, (300, 225))
+    #frame_surface = pygame.image.frombuffer(frame_resized.tobytes(), frame_resized.shape[1::-1], "BGR")
+    #JANELA.blit(frame_surface, (LARGURA_JANELA - 320, ALTURA_JANELA - 250))
 
 
 def desenhar_texto(janela, texto, fonte, cor, posicao):
@@ -39,9 +40,9 @@ def nova_janela(titulo):
         JANELA.fill(PRETO)
         desenhar_texto(JANELA, titulo, FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2))
 
-        frame = video.get_frame()
-        if frame is not None:
-            mostrar_camera(frame)
+        #frame = video.get_frame()
+        #if frame is not None:
+            #mostrar_camera(frame)
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -117,7 +118,8 @@ def menu_principal():
                 sys.exit()
             
             if texto_clicado("APRENDER", FONTE_BOTAO, pos_aprender, event):
-                nova_janela("Modo Aprender")
+                aprender = ModoAprender(video, hand_detector)
+                aprender.executar()
             if texto_clicado("TREINO", FONTE_BOTAO, pos_treino, event):
                 nova_janela("Modo Treino")
             if texto_clicado("DESAFIO", FONTE_BOTAO, pos_desafio, event):

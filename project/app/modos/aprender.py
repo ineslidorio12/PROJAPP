@@ -37,13 +37,15 @@ class ModoAprender:
                 
             current_time =time.time()
             if current_time - self.start_time < 5:
-                self.desenhar_texto(FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
-                                    )
+                self.desenhar_texto("Neste modo podes aprender uma linguagem gestual personalizada aos nossos jogadores",
+                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
+                )
             
             else:
                 self.desenhar_texto("OBJETIVO", FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50))
-                self.desenhar_texto("Faz os gestos que correspondem às imagens", FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
-                                    )
+                self.desenhar_texto("Faz os gestos que correspondem às imagens", 
+                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
+                )
                 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
