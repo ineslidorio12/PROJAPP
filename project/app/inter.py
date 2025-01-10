@@ -10,14 +10,6 @@ from modos.aprender import ModoAprender
 video = VideoCaptureThread()
 hand_detector = HandDetector(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 # --------------------------------------------------------------
-# def mostrar_camera(frame):
-    #results = hand_detector.detect_hands(frame)
-    #hand_detector.draw_hands(frame, results)
-    
-    #frame_resized = cv.resize(frame, (300, 225))
-    #frame_surface = pygame.image.frombuffer(frame_resized.tobytes(), frame_resized.shape[1::-1], "BGR")
-    #JANELA.blit(frame_surface, (LARGURA_JANELA - 320, ALTURA_JANELA - 250))
-
 
 def desenhar_texto(janela, texto, fonte, cor, posicao):
     texto_superficie = fonte.render(texto, True, cor)
@@ -39,10 +31,6 @@ def nova_janela(titulo):
     while True:
         JANELA.fill(PRETO)
         desenhar_texto(JANELA, titulo, FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2))
-
-        #frame = video.get_frame()
-        #if frame is not None:
-            #mostrar_camera(frame)
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

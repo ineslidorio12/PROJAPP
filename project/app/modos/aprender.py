@@ -1,7 +1,7 @@
 import pygame
 import cv2 as cv
 import time
-from config import JANELA, IMAGEM_FUNDO, FONTE_TITULO, FONTE_BOTAO, BRANCO, CINZENTO, PRETO, LARGURA_JANELA, ALTURA_JANELA
+from config import JANELA, FONTE_TITULO, FONTE_BOTAO, BRANCO, PRETO, LARGURA_JANELA, ALTURA_JANELA
 
 
 class ModoAprender:
