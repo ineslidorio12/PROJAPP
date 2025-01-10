@@ -15,5 +15,5 @@ BRANCO = (255, 255, 255)
 PRETO = (0, 0, 0)
 CINZENTO = (79, 79, 79) 
 
-FONTE_TITULO = pygame.font.Font(None, 74)
+FONTE_TITULO = pygame.font.Font("project/utils/dogicapixel.ttf", 36)
 FONTE_BOTAO = pygame.font.Font("project/utils/dogicapixel.ttf", 18)

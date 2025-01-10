@@ -17,4 +17,36 @@ class ModoAprender:
         texto_retangulo = texto_superficie.get_rect(center=posicao)
         JANELA.blit(texto_superficie, texto_retangulo)
         
+    
+    def mostrar_camera(self, frame):
+        results = self.hand_detector.detect_hands(frame)
+        self.hand_detector.draw_hands(frame, results)
         
+        frame_resized = cv.resize(frame, (300, 225))
+        frame_surface = pygame.image.frombuffer(frame_resized.tobytes(), frame_resized.shape[1::-1], "BGR")
+        JANELA.blit(frame_surface, (LARGURA_JANELA - 320, ALTURA_JANELA - 250))
+
+
+    def executar(self):
+        while self.running:
+            JANELA.fill(PRETO)
+            
+            frame = self.video.get_frame()
+            if frame is not None:
+                self.mostrar_camera(frame)
+                
+            current_time =time.time()
+            if current_time - self.start_time < 5:
+                self.desenhar_texto(FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
+                                    )
+            
+            else:
+                self.desenhar_texto("OBJETIVO", FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50))
+                self.desenhar_texto("Faz os gestos que correspondem às imagens", FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
+                                    )
+                
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                    self.running = False
+                    
+            pygame.display.flip()
