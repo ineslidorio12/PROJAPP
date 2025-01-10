@@ -4,15 +4,26 @@ import sys
 import cv2 as cv
 from config import JANELA, IMAGEM_FUNDO, FONTE_TITULO, FONTE_BOTAO, BRANCO, CINZENTO, PRETO, LARGURA_JANELA, ALTURA_JANELA
 from video import VideoCaptureThread
+from hand_detector import HandDetector
 
-# video_thread = VideoCaptureThread()
-
+video = VideoCaptureThread()
+hand_detector = HandDetector(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 # --------------------------------------------------------------
+def mostrar_camera(frame):
+    results = hand_detector.detect_hands(frame)
+    hand_detector.draw_hands(frame, results)
+    
+    frame_resized = cv.resize(frame, (300, 225))
+    frame_surface = pygame.image.frombuffer(frame_resized.tobytes(), frame_resized.shape[1::-1], "BGR")
+    JANELA.blit(frame_surface, (LARGURA_JANELA - 320, ALTURA_JANELA - 250))
+
+
 def desenhar_texto(janela, texto, fonte, cor, posicao):
     texto_superficie = fonte.render(texto, True, cor)
     texto_retangulo = texto_superficie.get_rect(center=posicao)
     janela.blit(texto_superficie, texto_retangulo)
     return texto_retangulo
+
 
 def texto_clicado(texto, fonte, posicao, event):
     texto_superficie = fonte.render(texto, True, BRANCO)
@@ -22,11 +33,16 @@ def texto_clicado(texto, fonte, posicao, event):
         return True
     return False
 
+
 def nova_janela(titulo):
     while True:
         JANELA.fill(PRETO)
         desenhar_texto(JANELA, titulo, FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2))
 
+        frame = video.get_frame()
+        if frame is not None:
+            mostrar_camera(frame)
+            
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -53,15 +69,15 @@ def pagina_inicial():
         
         desenhar_texto(JANELA, "JOGAR", FONTE_BOTAO, cor_jogar, pos_jogar)
         desenhar_texto(JANELA, "SAIR", FONTE_BOTAO, cor_sair, pos_sair)
-
+            
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                video_thread.stop()
                 pygame.quit()
                 sys.exit()
-            
+            if texto_clicado("JOGAR", FONTE_BOTAO, pos_jogar, event):
+                menu_principal()
+                
             if texto_clicado("SAIR", FONTE_BOTAO, pos_sair, event):
-                video_thread.stop()
                 pygame.quit()
                 sys.exit()
             
@@ -93,10 +109,10 @@ def menu_principal():
         desenhar_texto(JANELA, "DESAFIO", FONTE_BOTAO, cor_desafio, pos_desafio)
         desenhar_texto(JANELA, "PAGINA INICIAL", FONTE_BOTAO, cor_inicial, pos_inicial)
         desenhar_texto(JANELA, "SAIR", FONTE_BOTAO, cor_sair, pos_sair)
+        
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                video_thread.stop()
                 pygame.quit()
                 sys.exit()
             
@@ -115,3 +131,4 @@ def menu_principal():
         pygame.display.flip()
         
 pagina_inicial()
+

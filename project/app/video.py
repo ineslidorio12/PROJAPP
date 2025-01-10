@@ -15,7 +15,7 @@ class VideoCaptureThread:
         while self.running:
             ret, frame = self.cap.read()
             if ret:
-                self.frame = frame
+                self.frame = cv2.flip(frame, 1)
                 
     def get_frame(self):
         return self.frame
