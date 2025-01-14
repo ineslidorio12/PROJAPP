@@ -6,6 +6,8 @@ from config import JANELA, IMAGEM_FUNDO, FONTE_TITULO, FONTE_BOTAO, BRANCO, CINZ
 from video import VideoCaptureThread
 from hand_detector import HandDetector
 from modos.aprender import ModoAprender
+from modos.treinar import ModoTreinar
+from modos.desafio import ModoDesafio
 
 video = VideoCaptureThread()
 hand_detector = HandDetector(min_detection_confidence=0.5, min_tracking_confidence=0.5)
@@ -109,9 +111,11 @@ def menu_principal():
                 aprender = ModoAprender(video, hand_detector)
                 aprender.executar()
             if texto_clicado("TREINO", FONTE_BOTAO, pos_treino, event):
-                nova_janela("Modo Treino")
+                treinar = ModoTreinar(video, hand_detector)
+                treinar.executar()
             if texto_clicado("DESAFIO", FONTE_BOTAO, pos_desafio, event):
-                nova_janela("Modo Desafio")
+                desafio = ModoDesafio(video, hand_detector)
+                desafio.executar()
             if texto_clicado("PAGINA INICIAL", FONTE_BOTAO, pos_inicial, event):
                 return
             if texto_clicado("SAIR", FONTE_BOTAO, pos_sair, event):

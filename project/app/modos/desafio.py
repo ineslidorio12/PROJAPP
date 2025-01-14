@@ -4,7 +4,7 @@ import time
 from config import JANELA, FONTE_TITULO, FONTE_BOTAO, BRANCO, PRETO, LARGURA_JANELA, ALTURA_JANELA
 
 
-class ModoAprender:
+class ModoDesafio:
     def __init__(self, video, hand_detector):
         self.video = video
         self.hand_detector = hand_detector
@@ -37,13 +37,13 @@ class ModoAprender:
                 
             current_time =time.time()
             if current_time - self.start_time < 5:
-                self.desenhar_texto("Neste modo podes aprender uma linguagem gestual personalizada por nós.",
+                self.desenhar_texto("Desafia-te e mostra o que sabes!",
                                     FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
                 )
             
             else:
                 self.desenhar_texto("OBJETIVO", FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50))
-                self.desenhar_texto("Replica os gestos e memoriza a palavra a que cada gesto está associado.", 
+                self.desenhar_texto("Acerta o máximo de palavras que conseguires até o tempo acabar.", 
                                     FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
                 )
                 
