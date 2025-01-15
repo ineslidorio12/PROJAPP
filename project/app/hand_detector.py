@@ -34,7 +34,7 @@ class HandDetector:
                 if dedos_levantados == 5:
                     return True
             
-        return None
+        return False
     
     def contar_dedos(self, hand_landmarks):
         dedos = [4, 8, 12, 16, 20]

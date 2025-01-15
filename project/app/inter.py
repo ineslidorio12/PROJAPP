@@ -63,12 +63,17 @@ def pagina_inicial():
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                video.release()
+                hand_detector.close()
                 pygame.quit()
                 sys.exit()
+                
             if texto_clicado("JOGAR", FONTE_BOTAO, pos_jogar, event):
                 menu_principal()
                 
             if texto_clicado("SAIR", FONTE_BOTAO, pos_sair, event):
+                video.release()
+                hand_detector.close()
                 pygame.quit()
                 sys.exit()
             

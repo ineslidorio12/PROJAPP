@@ -28,8 +28,11 @@ class ModoDesafio:
         
         gesto_detetado = self.hand_detector.detect_gesto(results)
         if gesto_detetado == self.gesto_esperado:
-            self.correto == True
-            
+            self.correto = True
+        else:
+            self.correto = False
+        
+        
         frame_resized = cv.resize(frame, (300, 225))
         frame_surface = pygame.image.frombuffer(frame_resized.tobytes(), frame_resized.shape[1::-1], "BGR")
         JANELA.blit(frame_surface, (LARGURA_JANELA - 320, ALTURA_JANELA - 250))
@@ -46,12 +49,12 @@ class ModoDesafio:
             current_time =time.time()
             elapsed_time = current_time - self.start_time
             
-            if elapsed_time < 5:
+            if 0 <= elapsed_time < 5:
                 self.desenhar_texto("Desafia-te e mostra o que sabes!",
                                     FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
                 )
             
-            elif elapsed_time < 11:
+            elif 5 <= elapsed_time < 11:
                 self.desenhar_texto("OBJETIVO", FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50))
                 self.desenhar_texto("Acerta o máximo de palavras que conseguires até o tempo acabar.", 
                                     FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
@@ -62,13 +65,16 @@ class ModoDesafio:
                 )
             
             else:
-                self.desenhar_texto(self.palavra_atual, FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
-                )
+                palavra_posicao = (LARGURA_JANELA // 2, ALTURA_JANELA // 2)
+                self.desenhar_texto(self.palavra_atual, FONTE_TITULO, BRANCO, palavra_posicao)
                 
                 if self.correto:
-                    self.desenhar_texto("✔️", FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2 + 200, ALTURA_JANELA // 2),
+                    print(f"Gesto confirmado para a palavra: {self.palavra_atual}")
+                    self.desenhar_texto(
+                        "Gesto confirmado!",
+                        FONTE_BOTAO, (0, 255, 0), (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 50)
                     )
-                
+                    
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                     self.running = False
