@@ -12,7 +12,6 @@ class HandDetector:
         )
 
     def detect_hands(self, frame):
-        # Converter imagem para RGB
         frame_rgb = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
         results = self.hands.process(frame_rgb)
         return results
@@ -28,5 +27,23 @@ class HandDetector:
                     self.mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=1, circle_radius=1),
                 )
 
+    def detect_gesto(self, results):
+        if results.multi_hand_landmarks:
+            for hand_landmarks in results.multi_hand_landmarks:
+                dedos_levantados = self.contar_dedos(hand_landmarks)
+                if dedos_levantados == 5:
+                    return True
+            
+        return None
+    
+    def contar_dedos(self, hand_landmarks):
+        dedos = [4, 8, 12, 16, 20]
+        dedos_levantados = 0
+        for dedo in dedos:
+            if hand_landmarks.landmark[dedo].y < hand_landmarks.landmark[dedo - 2].y:
+                dedos_levantados += 1
+        return dedos_levantados
+            
+        
     def close(self):
         self.hands.close()
