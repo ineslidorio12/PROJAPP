@@ -26,6 +26,18 @@ class HandDetector:
                     self.mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=1, circle_radius=1),
                     self.mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=1, circle_radius=1),
                 )
+                
+                if self.detect_gesto(results):
+                    cv.putText(
+                        frame,
+                        "Mao aberta detectada!",
+                        (10, 50),
+                        cv.FONT_HERSHEY_SIMPLEX,
+                        1,
+                        (0, 255, 0),
+                        2,
+                        cv.LINE_AA,
+                    )
 
     def detect_gesto(self, results):
         if results.multi_hand_landmarks:
