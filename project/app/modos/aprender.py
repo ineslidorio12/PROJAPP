@@ -10,7 +10,16 @@ class ModoAprender:
         self.hand_detector = hand_detector
         self.start_time = time.time()
         self.running = True
-    
+        self.mostrar_imagens_flag = False
+
+        self.imagens = [
+            pygame.image.load("project/assets/gesto/THUMBS.png"),
+            pygame.image.load("project/assets/gesto/PEACE.png"),
+            pygame.image.load("project/assets/gesto/PALM.png"),
+            pygame.image.load("project/assets/gesto/FIST.png"),
+            pygame.image.load("project/assets/gesto/3FINGERS.png")
+        ]
+        self.imagens = [pygame.transform.scale(img, (300, 300)) for img in self.imagens]
     
     def desenhar_texto(self, texto, fonte, cor, posicao):
         texto_superficie = fonte.render(texto, True, cor)
@@ -26,7 +35,19 @@ class ModoAprender:
         frame_surface = pygame.image.frombuffer(frame_resized.tobytes(), frame_resized.shape[1::-1], "BGR")
         JANELA.blit(frame_surface, (LARGURA_JANELA - 320, ALTURA_JANELA - 250))
 
-
+    def mostrar_imagens(self):
+        posicoes = [
+            (LARGURA_JANELA // 2 - 350, ALTURA_JANELA // 2 - 150),
+            (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 150),
+            (LARGURA_JANELA // 2 + 350, ALTURA_JANELA // 2 - 150),
+            (LARGURA_JANELA // 2 - 200, ALTURA_JANELA // 2 + 150),
+            (LARGURA_JANELA // 2 + 200, ALTURA_JANELA // 2 + 150),
+        ]
+        
+        for img, pos in zip(self.imagens, posicoes):
+            JANELA.blit(img, img.get_rect(center=pos))
+            
+            
     def executar(self):
         while self.running:
             JANELA.fill(PRETO)
@@ -36,17 +57,27 @@ class ModoAprender:
                 self.mostrar_camera(frame)
                 
             current_time =time.time()
-            if current_time - self.start_time < 5:
-                self.desenhar_texto("Neste modo podes aprender uma linguagem gestual personalizada por nós.",
+            tempo_passado = int(current_time - self.start_time)
+            
+            if tempo_passado < 5:
+                self.desenhar_texto("Neste modo podes aprender uma linguagem gestual personalizada por nos.",
                                     FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
                 )
             
-            else:
+            elif 5 <= tempo_passado < 11:
                 self.desenhar_texto("OBJETIVO", FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50))
-                self.desenhar_texto("Replica os gestos e memoriza a palavra a que cada gesto está associado.", 
+                self.desenhar_texto("Replica os gestos e memoriza a palavra a que cada gesto esta associado.", 
                                     FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
                 )
                 
+                tempo_restante = 11 - tempo_passado
+                self.desenhar_texto(f"{tempo_restante} s",
+                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 50),
+                )
+                
+            else:
+                self.mostrar_imagens()
+                    
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                     self.running = False
