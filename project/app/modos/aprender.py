@@ -47,14 +47,13 @@ class ModoAprender:
         for i, (img, pos) in enumerate(zip(self.imagens, posicoes)):
             JANELA.blit(img, img.get_rect(center=pos))
             
-            if i == 2 and 'palm' in gestos_detetados:
+            if (i == 2 and 'palm' in gestos_detetados) or \
+                (i == 0 and 'thumbs_up' in gestos_detetados) or \
+                (i == 3 and 'fist' in gestos_detetados) or \
+                (i == 1 and 'peace' in gestos_detetados) or \
+                (i == 4 and '3fingers' in gestos_detetados):
                 pygame.draw.circle(JANELA, (0, 255, 0), pos, 30)
-            if i == 0 and 'thumbs_up' in gestos_detetados:
-                pygame.draw.circle(JANELA, (0, 255, 0), pos, 30)
-            if i == 3 and 'fist' in gestos_detetados:
-                pygame.draw.circle(JANELA, (0, 255, 0), pos, 30)
-            if i == 1 and 'peace' in gestos_detetados:  # Índice 1 -> PEACE.png (dois dedos levantados)
-                pygame.draw.circle(JANELA, (0, 255, 0), pos, 30)   
+        
          
             
     def executar(self):
@@ -62,7 +61,8 @@ class ModoAprender:
             JANELA.fill(PRETO)
             
             frame = self.video.get_frame()
-            gestos_detetados = []
+            gestos_detetados = set()
+            
             if frame is not None:
                 results = self.hand_detector.detect_hands(frame)
                 self.hand_detector.draw_hands(frame, results)
@@ -71,14 +71,16 @@ class ModoAprender:
                     for hand_landmarks in results.multi_hand_landmarks:
                         
                         if self.hand_detector.detect_gesto_mao_aberta(hand_landmarks):
-                            gestos_detetados.append('palm')
+                            gestos_detetados.add('palm')
                         if self.hand_detector.detect_gesto_thumbs_up(hand_landmarks):
-                            gestos_detetados.append('thumbs_up')
+                            gestos_detetados.add('thumbs_up')
                         if self.hand_detector.detect_gesto_mao_fechada(hand_landmarks):
-                            gestos_detetados.append('fist')
+                            gestos_detetados.add('fist')
                         if self.hand_detector.detect_gesto_peace_sign(hand_landmarks):
-                            gestos_detetados.append('peace')
-                            
+                            gestos_detetados.add('peace')
+                        if self.hand_detector.detect_gesto_tres_dedos(hand_landmarks):
+                            gestos_detetados.add('3fingers')
+                        
                 self.mostrar_camera(frame)
                 
             current_time =time.time()

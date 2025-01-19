@@ -7,6 +7,7 @@ class HandDetector:
         self.mp_hands = mp.solutions.hands
         self.mp_drawing = mp.solutions.drawing_utils
         self.hands = self.mp_hands.Hands(
+            max_num_hands=1,
             min_detection_confidence=min_detection_confidence,
             min_tracking_confidence=min_tracking_confidence,
         )
@@ -25,46 +26,48 @@ class HandDetector:
                     self.mp_hands.HAND_CONNECTIONS,
                     self.mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=1, circle_radius=1),
                     self.mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=1, circle_radius=1),
-                )
-                
-                if self.detect_gesto_mao_aberta(hand_landmarks):
-                    cv.putText(frame, "Mao aberta detetada!", (10, 50), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv.LINE_AA,)
-
-                if self.detect_gesto_thumbs_up(hand_landmarks):
-                    cv.putText(frame, "Polegar para cima detetado!", (10, 50), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv.LINE_AA,)
-                
-                if self.detect_gesto_mao_fechada(hand_landmarks):
-                    cv.putText(frame, "Mão fechada detetada!", (10, 50), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv.LINE_AA,)
-    
+                )   
     
     def detect_gesto_mao_aberta(self, hand_landmarks):
         dedos_levantados = self.contar_dedos(hand_landmarks)
         return dedos_levantados == 5
     
+    
     def detect_gesto_thumbs_up(self, hand_landmarks):
-        polegar_cima = hand_landmarks.landmark[4].y < hand_landmarks.landmark[3].y < hand_landmarks.landmark[2].y
+        polegar_levantado = hand_landmarks.landmark[4].y < hand_landmarks.landmark[3].y < hand_landmarks.landmark[2].y
         
-        outros_dedos_abaixados = all(hand_landmarks.landmark[d].y > hand_landmarks.landmark[d - 2].y for d in [8, 12, 16, 20])
-        return polegar_cima and outros_dedos_abaixados
+        outros_dedos_abaixados = (
+            hand_landmarks.landmark[8].y > hand_landmarks.landmark[5].y and
+            hand_landmarks.landmark[12].y > hand_landmarks.landmark[9].y and
+            hand_landmarks.landmark[16].y > hand_landmarks.landmark[13].y and
+            hand_landmarks.landmark[20].y > hand_landmarks.landmark[17].y
+        )
+        
+        return polegar_levantado and outros_dedos_abaixados
     
     def detect_gesto_mao_fechada(self, hand_landmarks):
         dedos_levantados = self.contar_dedos(hand_landmarks)
         return dedos_levantados == 0
     
     def detect_gesto_peace_sign(self, hand_landmarks):
-        indicador_levantado = hand_landmarks.landmark[8].y < hand_landmarks.landmark[6].y
-        medio_levantado = hand_landmarks.landmark[12].y < hand_landmarks.landmark[10].y
-        
-        outros_dedos_abaixados = all(hand_landmarks.landmark[d].y > hand_landmarks.landmark[d - 2].y for d in [16, 20])
-        return indicador_levantado and medio_levantado and outros_dedos_abaixados
+        dedos_levantados = self.contar_dedos(hand_landmarks)
+        return dedos_levantados == 2
+    
+    def detect_gesto_tres_dedos(self, hand_landmarks):
+        dedos_levantados = self.contar_dedos(hand_landmarks)
+        return dedos_levantados == 3
+    
     
     def contar_dedos(self, hand_landmarks):
-        dedos = [4, 8, 12, 16, 20]
+        dedos = [8, 12, 16, 20]
         dedos_levantados = 0
         
         for dedo in dedos:
             if hand_landmarks.landmark[dedo].y < hand_landmarks.landmark[dedo - 2].y:
                 dedos_levantados += 1
+        
+        if hand_landmarks.landmark[4].x < hand_landmarks.landmark[3].x:  # Para mão direita
+            dedos_levantados += 1
         
         return dedos_levantados
             
