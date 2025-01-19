@@ -3,7 +3,7 @@ import mediapipe as mp
 
 
 class HandDetector:
-    def __init__(self, min_detection_confidence=0.5, min_tracking_confidence=0.5):
+    def __init__(self, min_detection_confidence=0.7, min_tracking_confidence=0.7):
         self.mp_hands = mp.solutions.hands
         self.mp_drawing = mp.solutions.drawing_utils
         self.hands = self.mp_hands.Hands(
@@ -43,6 +43,10 @@ class HandDetector:
         
         outros_dedos_abaixados = all(hand_landmarks.landmark[d].y > hand_landmarks.landmark[d - 2].y for d in [8, 12, 16, 20])
         return polegar_cima and outros_dedos_abaixados
+    
+    def detect_gesto_mao_fechada(self, hand_landmarks):
+        dedos_levantados = self.contar_dedos(hand_landmarks)
+        return dedos_levantados == 0
     
     
     def contar_dedos(self, hand_landmarks):

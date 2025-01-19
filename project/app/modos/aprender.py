@@ -51,7 +51,8 @@ class ModoAprender:
                 pygame.draw.circle(JANELA, (0, 255, 0), pos, 30)
             if i == 0 and 'thumbs_up' in gestos_detetados:
                 pygame.draw.circle(JANELA, (0, 255, 0), pos, 30)
-                
+            if i == 3 and 'fist' in gestos_detetados:
+                pygame.draw.circle(JANELA, (0, 255, 0), pos, 30)
             
          
             
@@ -72,6 +73,8 @@ class ModoAprender:
                             gestos_detetados.append('palm')
                         if self.hand_detector.detect_gesto_thumbs_up(hand_ladmarks):
                             gestos_detetados.append('thumbs_up')
+                        if self.hand_detector.detect_gesto_mao_fechada(hand_ladmarks):
+                            gestos_detetados.append('fist')
                             
                 self.mostrar_camera(frame)
                 
