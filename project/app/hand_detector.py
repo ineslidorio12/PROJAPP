@@ -51,6 +51,12 @@ class HandDetector:
         dedos_levantados = self.contar_dedos(hand_landmarks)
         return dedos_levantados == 0
     
+    def detect_gesto_peace_sign(self, hand_landmarks):
+        indicador_levantado = hand_landmarks.landmark[8].y < hand_landmarks.landmark[6].y
+        medio_levantado = hand_landmarks.landmark[12].y < hand_landmarks.landmark[10].y
+        
+        outros_dedos_abaixados = all(hand_landmarks.landmark[d].y > hand_landmarks.landmark[d - 2].y for d in [16, 20])
+        return indicador_levantado and medio_levantado and outros_dedos_abaixados
     
     def contar_dedos(self, hand_landmarks):
         dedos = [4, 8, 12, 16, 20]

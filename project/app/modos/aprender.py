@@ -53,7 +53,8 @@ class ModoAprender:
                 pygame.draw.circle(JANELA, (0, 255, 0), pos, 30)
             if i == 3 and 'fist' in gestos_detetados:
                 pygame.draw.circle(JANELA, (0, 255, 0), pos, 30)
-            
+            if i == 1 and 'peace' in gestos_detetados:  # Índice 1 -> PEACE.png (dois dedos levantados)
+                pygame.draw.circle(JANELA, (0, 255, 0), pos, 30)   
          
             
     def executar(self):
@@ -67,14 +68,16 @@ class ModoAprender:
                 self.hand_detector.draw_hands(frame, results)
                 
                 if results.multi_hand_landmarks:
-                    for hand_ladmarks in results.multi_hand_landmarks:
+                    for hand_landmarks in results.multi_hand_landmarks:
                         
-                        if self.hand_detector.detect_gesto_mao_aberta(hand_ladmarks):
+                        if self.hand_detector.detect_gesto_mao_aberta(hand_landmarks):
                             gestos_detetados.append('palm')
-                        if self.hand_detector.detect_gesto_thumbs_up(hand_ladmarks):
+                        if self.hand_detector.detect_gesto_thumbs_up(hand_landmarks):
                             gestos_detetados.append('thumbs_up')
-                        if self.hand_detector.detect_gesto_mao_fechada(hand_ladmarks):
+                        if self.hand_detector.detect_gesto_mao_fechada(hand_landmarks):
                             gestos_detetados.append('fist')
+                        if self.hand_detector.detect_gesto_peace_sign(hand_landmarks):
+                            gestos_detetados.append('peace')
                             
                 self.mostrar_camera(frame)
                 
