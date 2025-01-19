@@ -32,6 +32,9 @@ class HandDetector:
 
                 if self.detect_gesto_thumbs_up(hand_landmarks):
                     cv.putText(frame, "Polegar para cima detetado!", (10, 50), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv.LINE_AA,)
+                
+                if self.detect_gesto_mao_fechada(hand_landmarks):
+                    cv.putText(frame, "Mão fechada detetada!", (10, 50), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv.LINE_AA,)
     
     
     def detect_gesto_mao_aberta(self, hand_landmarks):
