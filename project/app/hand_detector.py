@@ -27,7 +27,9 @@ class HandDetector:
                     self.mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=1, circle_radius=1),
                     self.mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=1, circle_radius=1),
                 )   
-    
+
+# detetcao dos gestos escolhidos ----------------------------------------------------------------------------------------
+  
     def detect_gesto_mao_aberta(self, hand_landmarks):
         dedos_levantados = self.contar_dedos(hand_landmarks)
         return dedos_levantados == 5
@@ -57,7 +59,7 @@ class HandDetector:
         dedos_levantados = self.contar_dedos(hand_landmarks)
         return dedos_levantados == 3
     
-    
+  
     def contar_dedos(self, hand_landmarks):
         dedos = [8, 12, 16, 20]
         dedos_levantados = 0

@@ -74,6 +74,7 @@ def pagina_inicial():
     menu_edit([
         ("JOGAR", BRANCO, (LARGURA_JANELA // 2, 370), menu_principal),
         ("SAIR", BRANCO, (LARGURA_JANELA // 2, 420), sair),
+        
     ])
             
 # menu inicial --------------------------------------------------------------------------------------------------------

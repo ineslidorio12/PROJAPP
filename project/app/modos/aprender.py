@@ -35,6 +35,8 @@ class ModoAprender:
         frame_surface = pygame.image.frombuffer(frame_resized.tobytes(), frame_resized.shape[1::-1], "BGR")
         JANELA.blit(frame_surface, (LARGURA_JANELA - 320, ALTURA_JANELA - 250))
 
+# ajustes das imagens e gestos  --------------------------------------------------------------------
+
     def mostrar_imagens(self, gestos_detetados):
         posicoes = [
             (LARGURA_JANELA // 2 - 350, ALTURA_JANELA // 2 - 150),
@@ -54,7 +56,7 @@ class ModoAprender:
                 (i == 4 and '3fingers' in gestos_detetados):
                 pygame.draw.circle(JANELA, (0, 255, 0), pos, 30)
         
-         
+# execução dos gestos ---------------------------------------------------------------------------------------------------     
             
     def executar(self):
         while self.running:
@@ -82,7 +84,10 @@ class ModoAprender:
                             gestos_detetados.add('3fingers')
                         
                 self.mostrar_camera(frame)
+       
                 
+# ajustes das frases iniciais quando se abre o modo ---------------------------------------------------------------              
+          
             current_time =time.time()
             tempo_passado = int(current_time - self.start_time)
             
