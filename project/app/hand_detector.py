@@ -27,33 +27,32 @@ class HandDetector:
                     self.mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=1, circle_radius=1),
                 )
                 
-                if self.detect_gesto(results):
-                    cv.putText(
-                        frame,
-                        "Mao aberta detectada!",
-                        (10, 50),
-                        cv.FONT_HERSHEY_SIMPLEX,
-                        1,
-                        (0, 255, 0),
-                        2,
-                        cv.LINE_AA,
-                    )
+                if self.detect_gesto_mao_aberta(hand_landmarks):
+                    cv.putText(frame, "Mao aberta detetada!", (10, 50), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv.LINE_AA,)
 
-    def detect_gesto(self, results):
-        if results.multi_hand_landmarks:
-            for hand_landmarks in results.multi_hand_landmarks:
-                dedos_levantados = self.contar_dedos(hand_landmarks)
-                if dedos_levantados == 5:
-                    return True
-            
-        return False
+                if self.detect_gesto_thumbs_up(hand_landmarks):
+                    cv.putText(frame, "Polegar para cima detetado!", (10, 50), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv.LINE_AA,)
+    
+    
+    def detect_gesto_mao_aberta(self, hand_landmarks):
+        dedos_levantados = self.contar_dedos(hand_landmarks)
+        return dedos_levantados == 5
+    
+    def detect_gesto_thumbs_up(self, hand_landmarks):
+        polegar_cima = hand_landmarks.landmark[4].y < hand_landmarks.landmark[3].y < hand_landmarks.landmark[2].y
+        
+        outros_dedos_abaixados = all(hand_landmarks.landmark[d].y > hand_landmarks.landmark[d - 2].y for d in [8, 12, 16, 20])
+        return polegar_cima and outros_dedos_abaixados
+    
     
     def contar_dedos(self, hand_landmarks):
         dedos = [4, 8, 12, 16, 20]
         dedos_levantados = 0
+        
         for dedo in dedos:
             if hand_landmarks.landmark[dedo].y < hand_landmarks.landmark[dedo - 2].y:
                 dedos_levantados += 1
+        
         return dedos_levantados
             
         

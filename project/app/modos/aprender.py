@@ -35,7 +35,7 @@ class ModoAprender:
         frame_surface = pygame.image.frombuffer(frame_resized.tobytes(), frame_resized.shape[1::-1], "BGR")
         JANELA.blit(frame_surface, (LARGURA_JANELA - 320, ALTURA_JANELA - 250))
 
-    def mostrar_imagens(self):
+    def mostrar_imagens(self, gestos_detetados):
         posicoes = [
             (LARGURA_JANELA // 2 - 350, ALTURA_JANELA // 2 - 150),
             (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 150),
@@ -44,16 +44,35 @@ class ModoAprender:
             (LARGURA_JANELA // 2 + 200, ALTURA_JANELA // 2 + 150),
         ]
         
-        for img, pos in zip(self.imagens, posicoes):
+        for i, (img, pos) in enumerate(zip(self.imagens, posicoes)):
             JANELA.blit(img, img.get_rect(center=pos))
             
+            if i == 2 and 'palm' in gestos_detetados:
+                pygame.draw.circle(JANELA, (0, 255, 0), pos, 30)
+            if i == 0 and 'thumbs_up' in gestos_detetados:
+                pygame.draw.circle(JANELA, (0, 255, 0), pos, 30)
+                
+            
+         
             
     def executar(self):
         while self.running:
             JANELA.fill(PRETO)
             
             frame = self.video.get_frame()
+            gestos_detetados = []
             if frame is not None:
+                results = self.hand_detector.detect_hands(frame)
+                self.hand_detector.draw_hands(frame, results)
+                
+                if results.multi_hand_landmarks:
+                    for hand_ladmarks in results.multi_hand_landmarks:
+                        
+                        if self.hand_detector.detect_gesto_mao_aberta(hand_ladmarks):
+                            gestos_detetados.append('palm')
+                        if self.hand_detector.detect_gesto_thumbs_up(hand_ladmarks):
+                            gestos_detetados.append('thumbs_up')
+                            
                 self.mostrar_camera(frame)
                 
             current_time =time.time()
@@ -76,7 +95,7 @@ class ModoAprender:
                 )
                 
             else:
-                self.mostrar_imagens()
+                self.mostrar_imagens(gestos_detetados)
                     
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
