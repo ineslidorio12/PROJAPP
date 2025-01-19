@@ -16,6 +16,8 @@ IMAGEM_FUNDO = pygame.transform.scale(IMAGEM_FUNDO, (LARGURA_JANELA, ALTURA_JANE
 BRANCO = (255, 255, 255)
 PRETO = (0, 0, 0)
 CINZENTO = (79, 79, 79) 
+VERDE = (0, 255, 0)
+VERMELHO = (255, 0, 0)
 
 FONTE_TITULO = pygame.font.Font("project/utils/dogicapixel.ttf", 36)
 FONTE_BOTAO = pygame.font.Font("project/utils/dogicapixel.ttf", 18)

@@ -1,7 +1,8 @@
 import pygame
 import cv2 as cv
 import time
-from config import JANELA, FONTE_TITULO, FONTE_BOTAO, BRANCO, PRETO, LARGURA_JANELA, ALTURA_JANELA
+import random
+from config import JANELA, FONTE_TITULO, FONTE_BOTAO, BRANCO, PRETO, VERDE, VERMELHO, LARGURA_JANELA, ALTURA_JANELA
 
 
 class ModoTreinar:
@@ -10,6 +11,18 @@ class ModoTreinar:
         self.hand_detector = hand_detector
         self.start_time = time.time()
         self.running = True
+        self.palavras_gestos = {
+            "OLA!": "palm",
+            "ADEUS!":"fist",
+            "OBRIGADA":"thumbs_up",
+            "TUDO BEM?":"peace",
+            "AJUDA":"3fingers"
+        }
+        
+        self.palavra_atual, self.gesto_correto = random.choice(list(self.palavras_gestos.items()))
+        self.feedback = None
+        self.feedback_time = None
+        self.feedback_delay = 2
     
     
     def desenhar_texto(self, texto, fonte, cor, posicao):
@@ -26,6 +39,23 @@ class ModoTreinar:
         frame_surface = pygame.image.frombuffer(frame_resized.tobytes(), frame_resized.shape[1::-1], "BGR")
         JANELA.blit(frame_surface, (LARGURA_JANELA - 320, ALTURA_JANELA - 250))
 
+        return results 
+    
+    def verificar_gesto(self, results):
+        if results.multi_hand_landmarks:
+            for hand_landmarks in results.multi_hand_landmarks:
+                if self.gesto_correto == "palm" and self.hand_detector.detect_gesto_mao_aberta(hand_landmarks):
+                    return True
+                if self.gesto_correto == "thumbs_up" and self.hand_detector.detect_gesto_thumbs_up(hand_landmarks):
+                    return True
+                if self.gesto_correto == "peace" and self.hand_detector.detect_gesto_peace_sign(hand_landmarks):
+                    return True
+                if self.gesto_correto == "3fingers" and self.hand_detector.detect_gesto_tres_dedos(hand_landmarks):
+                    return True
+                if self.gesto_correto == "fist" and self.hand_detector.detect_gesto_mao_fechada(hand_landmarks):
+                    return True
+                
+        return False
 
     def executar(self):
         while self.running:
@@ -33,19 +63,44 @@ class ModoTreinar:
             
             frame = self.video.get_frame()
             if frame is not None:
-                self.mostrar_camera(frame)
+                results = self.mostrar_camera(frame)
                 
+                if self.verificar_gesto(results):
+                    self.feedback = "Correto!"
+                    self.feedback_time = time.time()
+                    
+            if self.feedback and (time.time() - self.feedback_time > self.feedback_delay):
+                self.palavra_atual, self.gesto_correto = random.choice(list(self.palavras_gestos.items()))
+                self.feedback = None
+                    
             current_time =time.time()
-            if current_time - self.start_time < 5:
+            tempo_passado = int(current_time - self.start_time)
+            
+            if tempo_passado < 5:
                 self.desenhar_texto("Está na hora de treinar o que aprendes-te!",
                                     FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
                 )
             
-            else:
+            elif 5 <= tempo_passado < 11:
                 self.desenhar_texto("OBJETIVO", FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50))
                 self.desenhar_texto("Faz os gestos que correspondem às palavras mostradas.", 
                                     FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
                 )
+                
+                tempo_restante = 11 - tempo_passado
+                self.desenhar_texto(f"{tempo_restante} s",
+                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 50),
+                )
+            
+            else:
+                self.desenhar_texto(f"{self.palavra_atual}",
+                                    FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50),
+                )
+                
+                if self.feedback:
+                    self.desenhar_texto(self.feedback, 
+                                        FONTE_BOTAO, VERDE, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 50),
+                    )
                 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
