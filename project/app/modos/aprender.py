@@ -93,19 +93,16 @@ class ModoAprender:
             
             if tempo_passado < 5:
                 self.desenhar_texto("Neste modo podes aprender uma linguagem gestual personalizada por nos.",
-                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
-                )
+                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2))
             
             elif 5 <= tempo_passado < 11:
                 self.desenhar_texto("OBJETIVO", FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50))
                 self.desenhar_texto("Replica os gestos e memoriza a palavra a que cada gesto esta associado.", 
-                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
-                )
+                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2))
                 
                 tempo_restante = 11 - tempo_passado
                 self.desenhar_texto(f"{tempo_restante} s",
-                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 50),
-                )
+                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 50))
                 
             else:
                 self.mostrar_imagens(gestos_detetados)

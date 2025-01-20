@@ -77,30 +77,25 @@ class ModoTreinar:
             tempo_passado = int(current_time - self.start_time)
             
             if tempo_passado < 5:
-                self.desenhar_texto("Está na hora de treinar o que aprendes-te!",
-                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
-                )
+                self.desenhar_texto("Esta na hora de treinar o que aprendes-te!",
+                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2))
             
             elif 5 <= tempo_passado < 11:
                 self.desenhar_texto("OBJETIVO", FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50))
-                self.desenhar_texto("Faz os gestos que correspondem às palavras mostradas.", 
-                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2),
-                )
+                self.desenhar_texto("Faz os gestos que correspondem as palavras mostradas.", 
+                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2))
                 
                 tempo_restante = 11 - tempo_passado
                 self.desenhar_texto(f"{tempo_restante} s",
-                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 50),
-                )
+                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 50))
             
             else:
                 self.desenhar_texto(f"{self.palavra_atual}",
-                                    FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50),
-                )
+                                    FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50))
                 
                 if self.feedback:
                     self.desenhar_texto(self.feedback, 
-                                        FONTE_BOTAO, VERDE, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 50),
-                    )
+                                        FONTE_BOTAO, VERDE, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 50))
                 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
