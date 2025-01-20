@@ -5,7 +5,7 @@ import random
 from config import JANELA, FONTE_TITULO, FONTE_BOTAO, BRANCO, PRETO, VERDE, VERMELHO, LARGURA_JANELA, ALTURA_JANELA
 
 
-class ModoTreinar:
+class ModoDesafio:
     def __init__(self, video, hand_detector):
         self.video = video
         self.hand_detector = hand_detector

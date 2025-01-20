@@ -6,7 +6,7 @@ from video import VideoCaptureThread
 from hand_detector import HandDetector
 from modos.aprender import ModoAprender
 from modos.treinar import ModoTreinar
-# from modos.desafio import ModoDesafio
+from modos.desafio import ModoDesafio
 
 video = VideoCaptureThread()
 hand_detector = HandDetector(min_detection_confidence=0.5, min_tracking_confidence=0.5)
@@ -83,7 +83,7 @@ def menu_principal():
     menu_edit([
         ("APRENDER", BRANCO, (LARGURA_JANELA // 2, 300), iniciar_aprender),
         ("TREINO", BRANCO, (LARGURA_JANELA // 2, 350), iniciar_treinar),
-        # ("DESAFIO", BRANCO, (LARGURA_JANELA // 2, 400)),
+        ("DESAFIO", BRANCO, (LARGURA_JANELA // 2, 400), iniciar_desafio),
         ("PAGINA INICIAL", BRANCO, (LARGURA_JANELA // 2, 450), pagina_inicial),
         ("SAIR", BRANCO, (LARGURA_JANELA // 2, 500), sair),
     ])
@@ -100,9 +100,9 @@ def iniciar_treinar():
     treinar.executar()
 
 
-# def iniciar_desafio():
-    # desafio = ModoDesafio(video, hand_detector)  # Chama o main do desafio
-    # desafio.executar()
+def iniciar_desafio():
+    desafio = ModoDesafio(video, hand_detector)
+    desafio.executar()
 
 def sair():
     pygame.quit()
