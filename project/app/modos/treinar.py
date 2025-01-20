@@ -40,7 +40,9 @@ class ModoTreinar:
         JANELA.blit(frame_surface, (LARGURA_JANELA - 320, ALTURA_JANELA - 250))
 
         return results 
-    
+ 
+# ajustes dos gestos----------------------------------------------------------------------------------------------
+   
     def verificar_gesto(self, results):
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
@@ -75,7 +77,9 @@ class ModoTreinar:
                     
             current_time =time.time()
             tempo_passado = int(current_time - self.start_time)
-            
+  
+# ajustes da interface/implementacao do modo ------------------------------------------------------------------------------------------
+          
             if tempo_passado < 5:
                 self.desenhar_texto("Esta na hora de treinar o que aprendes-te!",
                                     FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2))

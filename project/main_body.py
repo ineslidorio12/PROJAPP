@@ -12,6 +12,8 @@ from body_detector import BodyGestureDetector
 video = VideoCaptureThread()
 hand_detector = HandDetector(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 body_detector = BodyGestureDetector()
+
+
 # --------------------------------------------------------------
 def mostrar_camera(frame):
     results = hand_detector.detect_hands(frame)

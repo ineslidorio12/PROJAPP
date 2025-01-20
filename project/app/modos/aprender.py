@@ -19,7 +19,7 @@ class ModoAprender:
             pygame.image.load("project/assets/gesto/FIST.png"),
             pygame.image.load("project/assets/gesto/3FINGERS.png")
         ]
-        self.imagens = [pygame.transform.scale(img, (300, 300)) for img in self.imagens]
+        self.imagens = [pygame.transform.scale(img, (200, 200)) for img in self.imagens]
     
     def desenhar_texto(self, texto, fonte, cor, posicao):
         texto_superficie = fonte.render(texto, True, cor)

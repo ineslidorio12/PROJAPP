@@ -1,4 +1,3 @@
-# pode ser considerado o main por enquanto
 import pygame
 import sys
 from config import JANELA, IMAGEM_FUNDO, FONTE_TITULO, FONTE_BOTAO, BRANCO, CINZENTO, PRETO, LARGURA_JANELA, ALTURA_JANELA
@@ -26,27 +25,11 @@ def texto_clicado(texto, fonte, posicao, event):
     if event.type == pygame.MOUSEBUTTONDOWN and texto_retangulo.collidepoint(event.pos):
         return True
     return False
-
-
-def nova_janela(titulo):
-    while True:
-        JANELA.fill(PRETO)
-        desenhar_texto(JANELA, titulo, FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2))
-            
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                return
-        
-        pygame.display.flip()
         
 # menu_edit -------------------------------------------------------------------------------------------------------------
 def menu_edit(opcoes):
     while True:
         JANELA.blit(IMAGEM_FUNDO, (0, 0))
-
         mouse_pos = pygame.mouse.get_pos()
         eventos = pygame.event.get()
 
@@ -57,8 +40,7 @@ def menu_edit(opcoes):
 
         for event in eventos:
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                sair()
 
             for opcao in opcoes:
                 texto, _, posicao, callback = opcao
