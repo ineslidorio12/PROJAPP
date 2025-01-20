@@ -106,14 +106,14 @@ class ModoDesafio:
                                     FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, 50))
                 
                 self.desenhar_texto(f"{self.palavra_atual}", 
-                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50))
+                                    FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50))
                 
                 self.desenhar_texto(f"Pontos: {self.pontuacao}", 
                                     FONTE_BOTAO, VERDE, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 100))
                 
                 if self.feedback:
                     self.desenhar_texto(self.feedback,
-                                        FONTE_TITULO, VERDE, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 20))
+                                        FONTE_BOTAO, VERDE, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 20))
                 
             else:
                 self.tempo_finalizado = True
@@ -122,7 +122,7 @@ class ModoDesafio:
                                     FONTE_TITULO, VERMELHO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50))
                 
                 self.desenhar_texto(f"PONTUACAO: {self.pontuacao}",
-                                    FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 20))
+                                    FONTE_TITULO, BRANCO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 20))
                     
                     
             for event in pygame.event.get():
