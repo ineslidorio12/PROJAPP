@@ -13,6 +13,7 @@ class ModoDesafio:
         self.running = True
         self.duracao_desafio = 30
         self.pontuacao = 0
+        self.tempo_finalizado = False
         self.palavras_gestos = {
             "OLA!": "palm",
             "ADEUS!":"fist",
@@ -68,14 +69,15 @@ class ModoDesafio:
             if frame is not None:
                 results = self.mostrar_camera(frame)
                 
-                if self.verificar_gesto(results):
+                if self.verificar_gesto(results) and time.time() - self.star_time > 11:
                     self.feedback = "Correto!"
                     self.feedback_time = time.time()
                     self.pontuacao += 1
                     
-                    if time.time() - self.feedback_time > self.feedback_delay:
+                    if self.feedback_time is not None and (time.time() - self.feedback_time > self.feedback_delay):
                         self.palavra_atual, self.gesto_correto = random.choice(list(self.palavras_gestos.items()))
                         self.feedback = None
+                        self.feedback_time = None
                         
             current_time =time.time()
             tempo_passado = int(current_time - self.start_time)
@@ -96,7 +98,7 @@ class ModoDesafio:
             elif tempo_passado < 11 + self.duracao_desafio:
                 tempo_restante = (11 + self.duracao_desafio) - tempo_passado
                 
-                self.desenhar_texto(f"Tempo: {tempo_restante}s", 
+                self.desenhar_texto(f"Tempo: {tempo_restante} s", 
                                     FONTE_BOTAO, BRANCO, (LARGURA_JANELA // 2, 50))
                 
                 self.desenhar_texto(f"{self.palavra_atual}", 
@@ -110,6 +112,8 @@ class ModoDesafio:
                                         FONTE_TITULO, VERDE, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 + 20))
                 
             else:
+                self.tempo_finalizado = True
+                
                 self.desenhar_texto("TIME OVER",
                                     FONTE_TITULO, VERMELHO, (LARGURA_JANELA // 2, ALTURA_JANELA // 2 - 50))
                 
